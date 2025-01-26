@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquareText, Settings, User } from "lucide-react";
+import { useThemeStore } from "../store/useThemeStore";
+import { LogOut, MessageSquareText, SunMoon, User } from "lucide-react";
 
 const Navbar = () => {
     const { logout, authUser } = useAuthStore();
+    const { lightTheme, setLightTheme } = useThemeStore();
+
+    const handleThemeChange = () => {
+        setLightTheme(!lightTheme);
+    };
 
     return (
         <header
@@ -25,19 +31,18 @@ const Navbar = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Link
-                            to={"/settings"}
+                        <button
                             className="btn btn-sm gap-2 transition-colors"
+                            onClick={handleThemeChange}
                         >
-                            <Settings className="w-4 h-4" />
-                            <span className="hidden sm:inline">Settings</span>
-                        </Link>
+                            <SunMoon className="w-4 h-4" />
+                        </button>
 
                         {authUser && (
                             <>
                                 <Link
                                     to={"/profile"}
-                                    className={`btn btn-sm gap-2`}
+                                    className="btn btn-sm gap-2"
                                 >
                                     <User className="size-5" />
                                     <span className="hidden sm:inline">
@@ -46,7 +51,7 @@ const Navbar = () => {
                                 </Link>
 
                                 <button
-                                    className="flex gap-2 items-center"
+                                    className="btn btn-sm gap-2"
                                     onClick={logout}
                                 >
                                     <LogOut className="size-5" />
