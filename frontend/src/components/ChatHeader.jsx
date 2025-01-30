@@ -1,10 +1,19 @@
-import { X } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
+import toast from "react-hot-toast";
 
 const ChatHeader = () => {
     const { selectedUser, setSelectedUser } = useChatStore();
     const { onlineUsers } = useAuthStore();
+
+    // const handleDeleteMessages = async () => {
+    //     try {
+    //         deleteMessages();
+    //     } catch (error) {
+    //         toast.error(error.response.data.message);
+    //     }
+    // };
 
     return (
         <div className="p-2.5 border-b border-base-300">
@@ -32,9 +41,20 @@ const ChatHeader = () => {
                 </div>
 
                 {/* Close button */}
-                <button onClick={() => setSelectedUser(null)}>
-                    <X />
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        className="btn btn-sm gap-2 transition-colors"
+                        onClick={() => useChatStore.getState().deleteMessages()}
+                    >
+                        <Trash2 />
+                    </button>
+                    <button
+                        className="btn btn-sm gap-2 transition-colors"
+                        onClick={() => setSelectedUser(null)}
+                    >
+                        <X />
+                    </button>
+                </div>
             </div>
         </div>
     );

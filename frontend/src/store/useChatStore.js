@@ -47,6 +47,21 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
+    deleteMessages: async () => {
+        const { selectedUser, messages } = get();
+
+        if (!selectedUser) {
+            toast.error("No user selected for deleting messages.");
+            return;
+        }
+        try {
+            await axiosInstance.delete(`/messages/delete/${selectedUser._id}`);
+            toast.success("Chat deleted successfully");
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
     setSelectedUser: (selectedUser) => {
         set({ selectedUser });
     },
