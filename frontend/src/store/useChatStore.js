@@ -26,6 +26,10 @@ export const useChatStore = create((set, get) => ({
 
     toggleButton: () => {
         const { selectedUser, favoriteUsers } = get();
+
+        if (!selectedUser) {
+            return;
+        }
         try {
             const check = favoriteUsers.some(
                 (user) => user._id === selectedUser._id
@@ -82,7 +86,9 @@ export const useChatStore = create((set, get) => ({
             toast.success("User removed from favorites successfully");
             getFavorites();
             // set({ favoriteToogle: false });
-        } catch (error) {}
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
     },
 
     getFavorites: async (userId) => {
@@ -133,6 +139,7 @@ export const useChatStore = create((set, get) => ({
         try {
             await axiosInstance.delete(`/messages/delete/${selectedUser._id}`);
             toast.success("Chat deleted successfully");
+            set({ messages: [] });
         } catch (error) {
             toast.error(error.response.data.message);
         }
