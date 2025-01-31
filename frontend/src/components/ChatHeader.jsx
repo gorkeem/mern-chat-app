@@ -1,19 +1,24 @@
-import { X, Trash2 } from "lucide-react";
+import { X, Trash2, Star } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 const ChatHeader = () => {
-    const { selectedUser, setSelectedUser } = useChatStore();
-    const { onlineUsers } = useAuthStore();
+    const {
+        selectedUser,
+        setSelectedUser,
+        favoriteUser,
+        unfavoriteUser,
+        getFavorites,
+        favoriteToogle,
+    } = useChatStore();
 
-    // const handleDeleteMessages = async () => {
-    //     try {
-    //         deleteMessages();
-    //     } catch (error) {
-    //         toast.error(error.response.data.message);
-    //     }
-    // };
+    const { onlineUsers, authUser } = useAuthStore();
+
+    useEffect(() => {
+        getFavorites(authUser._id);
+    }, [selectedUser._id]);
 
     return (
         <div className="p-2.5 border-b border-base-300">
@@ -37,6 +42,21 @@ const ChatHeader = () => {
                                 ? "Online"
                                 : "Offline"}
                         </p>
+                    </div>
+
+                    <div>
+                        <button
+                            className="btn btn-sm gap-2 transition-colors"
+                            onClick={
+                                favoriteToogle ? unfavoriteUser : favoriteUser
+                            }
+                        >
+                            <Star
+                                color="#ffcc00"
+                                fill={favoriteToogle ? "#ffcc00" : "none"}
+                                className="text-yellow-400"
+                            />
+                        </button>
                     </div>
                 </div>
 

@@ -5,19 +5,40 @@ import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-    const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
-        useChatStore();
+    const {
+        getUsers,
+        users,
+        selectedUser,
+        setSelectedUser,
+        isUsersLoading,
+        favoriteUsers,
+        getFavorites,
+    } = useChatStore();
 
     const { onlineUsers } = useAuthStore();
+
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+    const [showFavorites, setShowFavorites] = useState(false);
 
     useEffect(() => {
         getUsers();
+        getFavorites();
     }, [getUsers]);
 
-    const filteredUsers = showOnlineOnly
-        ? users.filter((user) => onlineUsers.includes(user._id))
-        : users;
+    const filteredUsers = users.filter((user) => {
+        if (showOnlineOnly && showFavorites) {
+            return (
+                onlineUsers.includes(user._id) &&
+                favoriteUsers.some((favUser) => favUser._id === user._id)
+            );
+        } else if (showOnlineOnly) {
+            return onlineUsers.includes(user._id);
+        } else if (showFavorites) {
+            return favoriteUsers.some((favUser) => favUser._id === user._id);
+        } else {
+            return true;
+        }
+    });
 
     if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -51,6 +72,18 @@ const Sidebar = () => {
                         online)
                     </span>
                 </div>
+
+                <div className="mt-3 hidden lg:flex items-center gap-2">
+                    <label className="cursor-pointer flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            checked={showFavorites}
+                            onChange={(e) => setShowFavorites(e.target.checked)}
+                            className="checkbox checkbox-sm"
+                        />
+                        <span className="text-sm">Show favorites</span>
+                    </label>
+                </div>
             </div>
 
             <div className="overflow-y-auto w-full py-3">
@@ -59,14 +92,14 @@ const Sidebar = () => {
                         key={user._id}
                         onClick={() => setSelectedUser(user)}
                         className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-base-300 transition-colors
-              ${
-                  selectedUser?._id === user._id
-                      ? "bg-base-300 ring-1 ring-base-300"
-                      : ""
-              }
-            `}
+                            w-full p-3 flex items-center gap-3
+                            hover:bg-base-300 transition-colors
+                            ${
+                                selectedUser?._id === user._id
+                                    ? "bg-base-300 ring-1 ring-base-300"
+                                    : ""
+                            }
+                        `}
                     >
                         <div className="relative mx-auto lg:mx-0">
                             <img
@@ -77,7 +110,7 @@ const Sidebar = () => {
                             {onlineUsers.includes(user._id) && (
                                 <span
                                     className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
+                                    rounded-full ring-2 ring-zinc-900"
                                 />
                             )}
                         </div>
@@ -98,7 +131,7 @@ const Sidebar = () => {
 
                 {filteredUsers.length === 0 && (
                     <div className="text-center text-zinc-500 py-4">
-                        No online users
+                        No users found
                     </div>
                 )}
             </div>

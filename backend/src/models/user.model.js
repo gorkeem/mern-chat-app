@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema(
         profilePic: {
             type: String,
             default: "",
+        },
+        favoriteUsers: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "User",
+            default: [],
         },
     },
     {

@@ -6,9 +6,11 @@ import { useAuthStore } from "./useAuthStore";
 export const useChatStore = create((set, get) => ({
     messages: [],
     users: [],
+    favoriteUsers: [],
     selectedUser: null,
     isUsersLoading: false,
     isMessagesLoading: false,
+    favoriteToogle: false,
 
     getUsers: async () => {
         set({ isUsersLoading: true });
@@ -19,6 +21,80 @@ export const useChatStore = create((set, get) => ({
             toast.error(error.response.data.message);
         } finally {
             set({ isUsersLoading: false });
+        }
+    },
+
+    toggleButton: () => {
+        const { selectedUser, favoriteUsers } = get();
+        try {
+            const check = favoriteUsers.some(
+                (user) => user._id === selectedUser._id
+            );
+            set({ favoriteToogle: check });
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
+    favoriteUser: async () => {
+        const { selectedUser, favoriteUsers, getFavorites } = get();
+
+        const check = favoriteUsers.some(
+            (user) => user._id === selectedUser._id
+        );
+
+        if (!selectedUser) {
+            toast.error("No user selected for adding to favorites");
+            return;
+        }
+        if (check) {
+            toast.error("User is already in favorites");
+            return;
+        }
+        try {
+            await axiosInstance.put(`/messages/favorite/${selectedUser._id}`);
+            toast.success("User added favorites successfully");
+            getFavorites();
+            set({ favoriteToogle: true });
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
+    unfavoriteUser: async () => {
+        const { selectedUser, favoriteUsers, getFavorites } = get();
+
+        const check = favoriteUsers.some(
+            (user) => user._id === selectedUser._id
+        );
+
+        if (!selectedUser) {
+            toast.error("No user selected for removing from favorites");
+            return;
+        }
+        if (!check) {
+            toast.error("User is already not in the favorites");
+            return;
+        }
+
+        try {
+            await axiosInstance.put(`/messages/unfavorite/${selectedUser._id}`);
+            toast.success("User removed from favorites successfully");
+            getFavorites();
+            // set({ favoriteToogle: false });
+        } catch (error) {}
+    },
+
+    getFavorites: async (userId) => {
+        const { toggleButton } = get();
+        try {
+            const res = await axiosInstance.get(
+                `/messages/get-favorites/${userId}`
+            );
+            set({ favoriteUsers: res.data });
+            toggleButton();
+        } catch (error) {
+            toast.error(error.response.data.message);
         }
     },
 
@@ -48,7 +124,7 @@ export const useChatStore = create((set, get) => ({
     },
 
     deleteMessages: async () => {
-        const { selectedUser, messages } = get();
+        const { selectedUser } = get();
 
         if (!selectedUser) {
             toast.error("No user selected for deleting messages.");

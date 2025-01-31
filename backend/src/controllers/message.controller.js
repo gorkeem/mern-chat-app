@@ -107,3 +107,98 @@ export const deleteMessages = async (req, res) => {
         });
     }
 };
+
+export const favoriteUser = async (req, res) => {
+    const { id: userToFavoriteId } = req.params;
+    const myId = req.user._id;
+
+    try {
+        const user = await User.findById(myId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        if (!user.favoriteUsers.includes(userToFavoriteId)) {
+            user.favoriteUsers.push(userToFavoriteId);
+            await user.save();
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "User added to favorites",
+        });
+    } catch (error) {
+        console.log("Error in favoriteUser controller", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
+
+export const unfavoriteUser = async (req, res) => {
+    const { id: userToUnfavoriteId } = req.params;
+    const myId = req.user._id;
+
+    try {
+        const user = await User.findById(myId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        const index = user.favoriteUsers.findIndex(
+            (favorite) => favorite._id.toString() === userToUnfavoriteId
+        );
+        if (index === -1) {
+            return res.status(404).json({
+                success: false,
+                message: "User not in favorites",
+            });
+        }
+
+        user.favoriteUsers.splice(index, 1);
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "User unfavorited successfully",
+        });
+    } catch (error) {
+        console.error("Error in unfavoriteUser controller:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
+
+export const getFavorites = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId).populate(
+            "favoriteUsers",
+            "-password"
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.status(200).json(user.favoriteUsers);
+    } catch (error) {
+        console.log("Error in getFavoriteUsers controller", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
