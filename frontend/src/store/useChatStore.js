@@ -115,17 +115,21 @@ export const useChatStore = create((set, get) => ({
             set({ isMessagesLoading: false });
         }
     },
-
     sendMessage: async (messageData) => {
-        const { selectedUser, messages } = get();
+        const { selectedUser, getMessages, messages } = get();
+        if (!selectedUser) {
+            return;
+        }
         try {
             const res = await axiosInstance.post(
                 `/messages/send/${selectedUser._id}`,
                 messageData
             );
-            set({ messages: [...messages, res.data] });
+            set((state) => ({ messages: [...state.messages, res.data] }));
         } catch (error) {
-            toast.error(error.response.data.message);
+            const errorMessage =
+                error.response?.data?.message || "An error occurred";
+            toast.error(errorMessage);
         }
     },
 
@@ -139,7 +143,7 @@ export const useChatStore = create((set, get) => ({
         try {
             await axiosInstance.delete(`/messages/delete/${selectedUser._id}`);
             toast.success("Chat deleted successfully");
-            set({ messages: [] });
+            // set({ messages: [] });
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -150,11 +154,8 @@ export const useChatStore = create((set, get) => ({
     },
 
     subscribeToMessages: () => {
-        const { selectedUser, messages } = get();
-
-        if (!selectedUser) {
-            return;
-        }
+        const { selectedUser } = get();
+        if (!selectedUser) return;
 
         const socket = useAuthStore.getState().socket;
 
@@ -163,9 +164,9 @@ export const useChatStore = create((set, get) => ({
                 newMessage.senderId === selectedUser._id;
             if (!isMessageSentFromSelectedUser) return;
 
-            set({
-                messages: [...messages, newMessage],
-            });
+            set((state) => ({
+                messages: [...state.messages, newMessage], // Fix here
+            }));
         });
     },
 
