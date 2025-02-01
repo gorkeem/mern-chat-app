@@ -3,7 +3,6 @@ import { connectDB } from "../lib/db.js";
 import User from "../models/user.model.js";
 
 config();
-console.log("MONGODB_URI:", process.env.MONGODB_URI); // Add this line
 
 const seedUsers = [
     // Female Users

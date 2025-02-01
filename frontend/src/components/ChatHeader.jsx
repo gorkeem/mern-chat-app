@@ -1,8 +1,7 @@
 import { X, Trash2, Star } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const ChatHeader = () => {
     const {
