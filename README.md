@@ -87,11 +87,19 @@ Ensure you have **Node.js** and **MongoDB** installed on your machine.
 
 ## Screenshots
 
-![Login%20Page](screenshots/Screenshot%201.png?raw=true "Login Page")
-![Signup%20Page](screenshots/Screenshot%202.png?raw=true "Signup Page")
-![Home%20Page](screenshots/Screenshot%203.png?raw=true "Home Page")
-![Sample%20Chat%20and%20Favorite%20Users%20List](screenshots/Screenshot%204.png?raw=true "Sample Chat and Favorite Users Page")
-![Profile%20Page](screenshots/Screenshot%205.png?raw=true "Profile Page")
-![Dark%20Theme%20and%20Online%20Users](screenshots/Screenshot%206.png?raw=true "Dark Theme and Online Users")
-![Sending%20Image%20with%20Text](screenshots/Screenshot%207.png?raw=true "Sending Image with Text")
-![Sample%20Chat](screenshots/Screenshot%208.png?raw=true "Sample Chat")
+-   Login Page
+    ![Login%20Page](screenshots/Screenshot%201.png?raw=true "Login Page")
+-   Signup Page
+    ![Signup%20Page](screenshots/Screenshot%202.png?raw=true "Signup Page")
+-   Home Page
+    ![Home%20Page](screenshots/Screenshot%203.png?raw=true "Home Page")
+-   Sample Chat and Favorite Users List
+    ![Sample%20Chat%20and%20Favorite%20Users%20List](screenshots/Screenshot%204.png?raw=true "Sample Chat and Favorite Users List")
+-   Profile Page
+    ![Profile%20Page](screenshots/Screenshot%205.png?raw=true "Profile Page")
+-   Dark Theme and Online Users
+    ![Dark%20Theme%20and%20Online%20Users](screenshots/Screenshot%206.png?raw=true "Dark Theme and Online Users")
+-   Sending Image with Text
+    ![Sending%20Image%20with%20Text](screenshots/Screenshot%207.png?raw=true "Sending Image with Text")
+-   Sample Chat
+    ![Sample%20Chat](screenshots/Screenshot%208.png?raw=true "Sample Chat")
