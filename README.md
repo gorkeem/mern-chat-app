@@ -87,7 +87,7 @@ Ensure you have **Node.js** and **MongoDB** installed on your machine.
 
 ## Screenshots
 
-![Login Page](screenshots/Screenshot 1.png)
+![Login_Page](screenshots/Screenshot 1.png "Title")
 ![Signup Page](screenshots/Screenshot 2.png)
 ![Home Page](screenshots/Screenshot 3.png)
 ![Sample Chat and Favorite Users List](screenshots/Screenshot 4.png)
