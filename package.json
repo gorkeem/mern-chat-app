@@ -1,0 +1,13 @@
+{
+  "name": "wassup",
+  "version": "1.0.0",
+  "description": "A chatting application similar to WhatsApp with authentication and a nice UI. Implemented with MongoDB, Express.js, React and Node.js. Real time connection and chatting is possible with socket.io.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
