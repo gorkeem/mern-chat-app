@@ -1,4 +1,4 @@
-# Real-Time Chat Application
+# Wassup! A Real-Time Chat Application
 
 ## Overview
 
